@@ -26,3 +26,14 @@ class Court(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Image(models.Model):
+    name = models.ImageField(upload_to='static/img/upload')
+    court_id = models.ForeignKey(Court, on_delete=models.CASCADE)
+    caption = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    
