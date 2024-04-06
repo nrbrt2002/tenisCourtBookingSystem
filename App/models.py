@@ -88,3 +88,15 @@ class Booking(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        existing_booking = Booking.objects.filter(
+        date=self.date,
+        session_id=self.session_id,
+        court_id=self.court_id,
+        ).first()
+        if existing_booking:
+            # print("the duoble chaeck is triggerd")
+            self.error_message = 'This court Already Booked at This session, find another one'
+            return False
+        return super(Booking, self).save(*args, **kwargs)
