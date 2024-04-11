@@ -3,6 +3,8 @@ from App.models import Booking, Court, Image
 from .forms import BookCourtForm
 from django.contrib import messages
 from django.db import transaction
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 
 def home(request):
@@ -21,14 +23,20 @@ def court(request, pk):
       if form.is_valid():
          with transaction.atomic():
             booking = form.save(commit=False)
-            if not booking.save():
-               error_message = booking.error_message
-               form.add_error(None, error_message)
-         # form.save()
-            else:
-               form = BookCourtForm()
+            if not booking.preSave():
+               error_messages = 'This court Already Booked at This session, find another one'
+               form.add_error(None, error_messages)
+            else:   
                messages.success(request, "Booking Process Started")
-         
+               send_mail(
+                  "Confirmation Email",
+                  "You have successfuly booked a court at weTenn tennis center\n Names: " + form.cleaned_data['name'],
+                  settings.EMAIL_HOST_USER,
+                  [form.cleaned_data['email']],
+                  fail_silently=False,
+               )
+                  
+               form = BookCourtForm()
          # return redirect()
       
    context = {'court': court, 'images': images, 'form': form}

@@ -89,7 +89,7 @@ class Booking(models.Model):
     def __str__(self):
         return self.name
     
-    def save(self, *args, **kwargs):
+    def preSave(self, *args, **kwargs):
         existing_booking = Booking.objects.filter(
         date=self.date,
         session_id=self.session_id,
@@ -97,6 +97,8 @@ class Booking(models.Model):
         ).first()
         if existing_booking:
             # print("the duoble chaeck is triggerd")
-            self.error_message = 'This court Already Booked at This session, find another one'
+            # self.error_message = 'This court Already Booked at This session, find another one'
             return False
-        return super(Booking, self).save(*args, **kwargs)
+        else:
+            # self.success_message = 
+            return super(Booking, self).save(*args, **kwargs)
