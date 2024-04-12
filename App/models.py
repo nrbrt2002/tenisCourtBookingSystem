@@ -87,7 +87,7 @@ class Booking(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.date} - {self.court_id} - {self.status}"
     
     def preSave(self, *args, **kwargs):
         existing_booking = Booking.objects.filter(
