@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, validate_image_file_extension
 # from .utils import validate_times 
 # Create your models here.
 
@@ -25,6 +25,7 @@ STATUS=(
     ('pendig', 'Pendig'),
     ('done', 'Done'),
     ('paid', 'Paid'),
+    ('cancled', 'Cancled'),
 )
 
 class Court(models.Model):
@@ -45,7 +46,7 @@ class Court(models.Model):
         return self.name
     
 class Image(models.Model):
-    name = models.ImageField(upload_to='static/img/upload')
+    name = models.ImageField(upload_to='img/upload', validators=[validate_image_file_extension])
     court_id = models.ForeignKey(Court, on_delete=models.CASCADE)
     caption = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -84,7 +85,7 @@ class Booking(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-date']
 
     def __str__(self):
         return f"{self.name} - {self.date} - {self.court_id} - {self.status}"
