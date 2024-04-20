@@ -51,6 +51,9 @@ class Image(models.Model):
     caption = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def delete(self, *args, **kwargs):
+        self.name.delete()
+        super().delete(*args, **kwargs)
 
 class Sessions(models.Model):
     name = models.CharField(max_length=50, unique=True)

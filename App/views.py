@@ -70,16 +70,11 @@ def images(request):
 
 @login_required
 def deleteImage(request, pk):
-   images = Image.objects.all()
-   form = AddImageForm() 
-   if request.method == 'GET':
+   if request.method == 'POST':
       image = Image.objects.get(id=pk)
-      if os.path.exists(image.name):
-         os.remove(image.name)
       image.delete()
       messages.success(request, "Image Deleted Successfuly")
-      context = {'images': images, 'form': form}
-      return render(request, 'admin/admin-images.html', context)
+      return redirect('admin-images')
 
 @login_required
 def bookings(request):

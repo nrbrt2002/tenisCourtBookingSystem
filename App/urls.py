@@ -12,7 +12,7 @@ urlpatterns = [
     path('dashboard/bookings', views.bookings, name="admin-bookings"),  
     path('dashboard/sessions', views.sessions, name="admin-sessions"), 
     path('dashboard/images', views.images, name="admin-images"), 
-    path('dashboard/images/<str:pk>/', views.deleteImage, name="delete-image"), 
+    path('dashboard/images/<int:pk>/', views.deleteImage, name="delete-image"), 
     path('dashboard/courts/<str:pk>/', views.changeAvailability, name="admin-courts-status"), 
     # path('accounts/logout', views.logout, name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
