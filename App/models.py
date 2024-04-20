@@ -59,6 +59,8 @@ class Sessions(models.Model):
     name = models.CharField(max_length=50, unique=True)
     startTime = models.TimeField()
     endTime = models.TimeField()
+    price = models.PositiveIntegerField()
+    isTainer = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

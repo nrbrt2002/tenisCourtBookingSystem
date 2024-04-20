@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-import os
+from datetime import date
 # Create your views here.
 
 def home(request):
@@ -23,7 +23,12 @@ def login(request):
 
 @login_required
 def dashboard(request):
-   return render(request, 'dashboard.html')
+   bookings = Booking.objects.filter(status = 'pendig').count()
+   courts = Court.objects.count()
+   sessions = Sessions.objects.count()
+   images = Image.objects.count()
+   contex = {'bookings': bookings, 'courts': courts, 'sessions': sessions, 'images': images}
+   return render(request, 'dashboard.html', contex)
 
 @login_required
 def adminCourts(request):
@@ -81,6 +86,14 @@ def bookings(request):
    bookings = Booking.objects.all()
    context = {'bookings': bookings}
    return render(request, 'admin/admin-bookings.html', context)
+
+@login_required
+def refresh(request):
+   
+   booking = Booking.objects.filter(date__lt = date.today(), status ="pending").update(status = "cancled")
+   messages.success(request, "Refresh complited")
+   return redirect(dashboard)
+   
    
 def court(request, pk):
    form = BookCourtForm()

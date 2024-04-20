@@ -12,58 +12,98 @@
             <li class="breadcrumb-item active" aria-current="page">Data</li> -->
         </ol>
     </nav>
-
-    <div style="padding: 20px;">
-        <div class="row mb-3 ml-3">
-            <div class="card col-md-3 mr-3 bg-success">
-                <div class="card-body ">
-                    <h5 class="card-title ">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
-            </div>
-        
-            <div class="card col-md-3 mr-3 bg-info">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
-            </div>
-        
-            <div class="card col-md-3 mr-3 bg-secondary">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
-            </div>
-        
-            <!-- <div class="card col-md-3 mr-3">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
-            </div> -->
-        </div>
-        
-        
-        <br>
-            <h2>Welcome to the Admin Dashboard</h2>
-            <p>This is a simple admin dashboard layout using HTML and Bootstrap.</p>
-            <p>You can customize and extend this template based on your project requirements.</p>
-        </div>
-
+    {% if messages %}
+    <div class="alert alert-success" role="alert">
+        {% for message in messages %}
+        {{message}}
+        {% endfor %}
     </div>
+    {% endif %}
+    <a href="{% url 'admin-refresh' %}" class="p-3"> <i class="fa fa-refresh"></i> Refresh</a>
+        <div class="row p-3">
+            <div class="col-xl-3 col-lg-3">
+                <div class="card l-bg-cherry">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0"><a href="{% url 'admin-bookings'%}">Bookings</a></h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-8">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{bookings}}
+                                </h2>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span>{{bookings}}<i class="fa fa-arrow-up"></i></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <div class="card l-bg-blue-dark">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-book-open"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0"><a href="{%url 'admin-courts' %}">Courts</a></h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-8">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{courts}}
+                                </h2>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span>{{courts}} <i class="fa fa-arrow-up"></i></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <div class="card l-bg-green-dark">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-clock"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0"><a href="{% url 'admin-sessions'%}">Sessions</a></h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-8">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{sessions}}
+                                </h2>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span>{{sessions}} <i class="fa fa-arrow-up"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <div class="card l-bg-orange-dark">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0"><a href="{% url 'admin-images'%}">Images</a></h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-8">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{images}}
+                                </h2>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span>{{images}} <i class="fa fa-arrow-up"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <!-- Bootstrap JS and dependencies -->
 

@@ -23,8 +23,10 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Date</th>
-                    <th>E-mail</th>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Price</th>
+                    <th>Trainer</th>
                     <th>Created</th>
                 </tr>
             </thead>
@@ -36,7 +38,13 @@
                 <td>{{session.name}}</td>
                 <td>{{session.startTime}}</td>
                 <td>{{session.endTime}}</td>
-                <td>{{session.created_at | timesince}}</td>
+                <td>{{session.price}}</td>
+                {% if session.isTainer == True %}
+                    <td><span class="badge badge-pill badge-primary">{{session.isTainer}}</span></td>
+                {% else %}
+                    <td><span class="badge badge-pill badge-secondary">{{session.isTainer}}</span></td>
+                {% endif %}
+                    <td>{{session.created_at | timesince}}</td>
             </tr>
             {% endfor%}
             </tbody>
