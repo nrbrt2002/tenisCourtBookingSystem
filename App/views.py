@@ -123,3 +123,39 @@ def court(request, pk):
       
    context = {'court': court, 'images': images, 'form': form}
    return render(request, "court.html", context)
+
+
+
+
+
+def about(request):
+   courts = Court.objects.count()
+   sessions = Sessions.objects.count()
+   contex = {"courts": courts, "sessions": sessions}
+   return render (request, "about.html", contex)
+
+
+def courts(request):
+   courts = Court.objects.filter(is_available=True)
+   context = {'courts': courts}
+   return render(request, 'courts.html', context)
+
+def support(request):
+   success_message = ""
+   if request.method == 'POST':
+      email = request.POST.get('email')
+      message = request.POST.get('message')
+      send_mail(
+                  "support Email",
+                  message +"\n from --"+email,
+                  settings.EMAIL_HOST_USER,
+                  ['normuyomba@gmail.com'],
+                  fail_silently=False,
+               )
+      success_message = "Your message has been submitted successfully! we'll contact you as soon"
+   return render(request, 'support.html', {'success_message': success_message})
+
+def sessions(request):
+   sessions = Sessions.objects.filter()
+   context = {'sessions': sessions}
+   return render(request, 'sessions.html', context)

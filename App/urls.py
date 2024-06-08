@@ -7,6 +7,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name="home"),
+    path('about', views.about, name="about"),
+    path('courts', views.courts, name="courts"),
+    path('support', views.support, name="support"),
+    path('sessions', views.sessions, name="sessions"),
+    
+    
+    
     path('dashboard', views.dashboard, name="dashboard"),
     path('dashboard/courts', views.adminCourts, name="admin-courts"), 
     path('dashboard/bookings', views.bookings, name="admin-bookings"),  
@@ -19,4 +26,5 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path('court/<str:pk>/', views.court, name="court"),
     
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
