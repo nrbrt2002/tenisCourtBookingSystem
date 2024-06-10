@@ -34,7 +34,7 @@ class Court(models.Model):
     court_location = models.CharField(max_length=20, choices=COURT_LOCATION)
     has_lighting = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
-    pre_image = models.ImageField(upload_to='static/img/upload', null=False)
+    pre_image = models.ImageField(upload_to='img/upload', null=False)
     description = models.TextField(null=True);
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -101,10 +101,10 @@ class Booking(models.Model):
         session_id=self.session_id,
         court_id=self.court_id,
         ).first()
-        if existing_booking:
+        if existing_booking == None:
             # print("the duoble chaeck is triggerd")
             # self.error_message = 'This court Already Booked at This session, find another one'
-            return False
+            return super(Booking, self).save(*args, **kwargs)
         else:
             # self.success_message = 
-            return super(Booking, self).save(*args, **kwargs)
+            return False

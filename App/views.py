@@ -96,7 +96,10 @@ def refresh(request):
    
    
 def court(request, pk):
-   form = BookCourtForm()
+   initial_data = {
+        'court_id': pk
+    }
+   form = BookCourtForm(initial=initial_data)
    court = Court.objects.get(id=pk)
    
    images = Image.objects.filter(court_id=pk)
@@ -105,10 +108,11 @@ def court(request, pk):
       if form.is_valid():
          with transaction.atomic():
             booking = form.save(commit=False)
-            if not booking.preSave():
+            if booking.preSave() == False:
                error_messages = 'This court Already Booked at This session, find another one'
                form.add_error(None, error_messages)
-            else:   
+               
+            else:
                messages.success(request, "Booking Process Started")
                send_mail(
                   "Confirmation Email",
@@ -119,6 +123,7 @@ def court(request, pk):
                )
                   
                form = BookCourtForm()
+               
          # return redirect()
       
    context = {'court': court, 'images': images, 'form': form}
