@@ -8,6 +8,12 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from datetime import date
+
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+import uuid
+from django.urls import reverse
+
 # Create your views here.
 
 def home(request):
@@ -51,7 +57,7 @@ def changeAvailability(request, pk):
       return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required
-def sessions(request):
+def dashboardSessions(request):
    sessions = Sessions.objects.all() 
    context = {'sessions': sessions}
    return render(request, 'admin/admin-sessions.html', context)
@@ -113,18 +119,23 @@ def court(request, pk):
                form.add_error(None, error_messages)
                
             else:
+               booking.save()
+               booking_id = booking.id
                messages.success(request, "Booking Process Started")
                send_mail(
                   "Confirmation Email",
-                  "You have successfuly booked a court at weTenn tennis center\n Names: " + form.cleaned_data['name'],
+                  "You have successfully started booking a court at weTenn tennis center\n" +
+                  "Names: " + form.cleaned_data['name'] + "\n" +
+                  "Court Name: " + form.cleaned_data['court_id'].name + "\n" +
+                  "Date: " + str(form.cleaned_data['date']) + "\n" +
+                  "Session: " + form.cleaned_data['session_id'].name + "\n" +
+                  f"Your booking Id is {booking_id}\n" +
+                  "Now proceed with payment",
                   settings.EMAIL_HOST_USER,
                   [form.cleaned_data['email']],
                   fail_silently=False,
                )
-                  
-               form = BookCourtForm()
-               
-         # return redirect()
+               return redirect('checkout', pk=booking_id) 
       
    context = {'court': court, 'images': images, 'form': form}
    return render(request, "court.html", context)
@@ -164,3 +175,46 @@ def sessions(request):
    sessions = Sessions.objects.filter()
    context = {'sessions': sessions}
    return render(request, 'sessions.html', context)
+
+
+
+
+
+def checkout(request, pk):
+   booking = Booking.objects.get(id = pk)
+   host = request.get_host()
+   paypal_checkout = {
+      'business': settings.PAYPAL_RECEIVER_EMAIL,
+      'amount': booking.session_id.price,
+      'court_name': booking.court_id.name,
+      'invoice': uuid.uuid4(),
+      'currency_code': 'USD',
+      'notify_url': f"http://{host}{reverse('paypal-ipn')}",
+      'return_url': f"http://{host}{reverse('payment-successful', kwargs={'pk':booking.pk})}",
+      'cancle_url': f"http://{host}{reverse('payment-failed', kwargs={'pk':booking.pk})}"
+   }
+   
+   paypal_payment = PayPalPaymentsForm(initial=paypal_checkout)
+   context = {'booking': booking, 'paypal': paypal_payment}
+   
+   return render(request, 'chekout.html',context)
+
+def paymentSuccessful(request, pk):
+   booking = Booking.objects.get(id=pk)
+   if booking.status != 'paid':
+      booking.status = 'paid'
+      booking.save()
+      send_mail(
+                  "Payment Successful",
+                  "You have complited you pament steps, see you at the court \n Thank you ",
+                  settings.EMAIL_HOST_USER,
+                  [booking.email],
+                  fail_silently=False,
+               )
+   context = {'booking': booking}
+   return render(request, 'payment-successful.html', context)
+
+def paymentFailed(request, pk):
+   booking = Booking.objects.get(id=pk)
+   context = {'booking': booking}
+   return render(request, 'payment-failed.html', context)

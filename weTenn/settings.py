@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'App.apps.AppConfig',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,6 @@ MEDIA_ROOT = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
+
+PAYPAL_RECEIVER_EMAIL = "weteenCourts@business.example.com"
+PAYPAL_TEST = True

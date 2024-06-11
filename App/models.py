@@ -104,7 +104,7 @@ class Booking(models.Model):
         if existing_booking == None:
             # print("the duoble chaeck is triggerd")
             # self.error_message = 'This court Already Booked at This session, find another one'
-            return super(Booking, self).save(*args, **kwargs)
+            # super(Booking, self).save(*args, **kwargs)
+            return True
         else:
-            # self.success_message = 
             return False

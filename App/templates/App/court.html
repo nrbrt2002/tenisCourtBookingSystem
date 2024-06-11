@@ -5,7 +5,7 @@
 {% if messages %}
 {% for message in messages %}
 <div class="alert alert-success" role="alert">
-    {{ message }}.Start payment
+    {{ message }}.<a href="{% url 'checkout'%}">Start payment</a> 
 </div>
 {% endfor %}
 {% endif %}
